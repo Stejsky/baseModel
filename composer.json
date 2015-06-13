@@ -1,0 +1,7 @@
+{
+    "name": "Stejsky/BaseModel",
+    "description": "Base Model, Entities and Object Mapper for Nette",
+    "require": {
+        "php": ">=5.4.0"
+    }
+}
