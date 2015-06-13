@@ -7,8 +7,9 @@
 
 namespace Stejsky\BaseModel;
 
+use Nette\Object;
 
-class BaseModel {
+class BaseModel extends Object {
 
 	/**
 	* @var \Nette\Database\Context @inject

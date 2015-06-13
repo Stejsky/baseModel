@@ -8,17 +8,47 @@
 namespace Stejsky\BaseModel;
 
 
-class BaseMapper {
+use Nette\Object;
+use Nette\Reflection\AnnotationsParser;
 
+class BaseMapper extends Object {
+
+	private $annotationForEncoding = 'map';
+
+	/**
+	 * @param BaseEntity $entity
+	 * @return array - encoded array with annotations to store to DB
+	 */
 	public function encode(BaseEntity $entity)
 	{
 		$reflection = new \ReflectionClass($entity);
-		$methods = get_object_vars($entity);
-		foreach ($methods as $method)
+		$properties = $reflection->getProperties();
+		$result = [];
+		foreach ($properties as $property)
 		{
-			dump ($method);
+			$annotations = AnnotationsParser::getAll($property);
+			if (isset($annotations[$this->annotationForEncoding])) {
+				$key = $annotations[$this->annotationForEncoding][0];
+			} else {
+				$key = $property->getName();
+			}
+			$value = $property->getValue($entity);
+			$result[$key] = $value;
 		}
-			die;
+
+		return $result;
 	}
 
+	public function decode($array)
+	{
+
+	}
+
+	/**
+	 * @param string $annotationForEncoding
+	 */
+	public function setAnnotationForEncoding($annotationForEncoding)
+	{
+		$this->annotationForEncoding = $annotationForEncoding;
+	}
 } 

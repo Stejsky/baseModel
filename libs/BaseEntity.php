@@ -7,8 +7,9 @@
 
 namespace Stejsky\BaseModel;
 
+use Nette\Object;
 
-class BaseEntity {
+class BaseEntity extends Object {
 
 	/**
 	 * @var int
