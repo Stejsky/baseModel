@@ -39,9 +39,38 @@ class BaseMapper extends Object {
 		return $result;
 	}
 
-	public function decode($array)
+	/**
+	 * @param $array - encoded object|array to create new object
+	 * @param $object - new instance of entity, that should be filled
+	 * @return $object
+	 */
+	public function decode($array, $object)
 	{
+		$reflection = new \ReflectionClass($object);
+		$properties = $reflection->getProperties();
+		foreach ($properties as $property)
+		{
+			$annotations = AnnotationsParser::getAll($property);
+			$annotation = (isset($annotations[$this->annotationForEncoding]) ? $annotations[$this->annotationForEncoding] : null);
+			if (isset($annotation)) {
+				if (isset($array[$annotation[0]])) {
+					$name = $property->getName();
+					$value = (isset($array[$annotation[0]]) ? $array[$annotation[0]] : null);
+					if ($value) {
+						$object->$name = $value;
+					}
+				}
+			} else {
+				$name = $property->getName();
+				$value = (isset($array[$name]) ? $array[$name] : null);
+				if ($value) {
+					$object->$name = $value;
+				}
 
+			}
+		}
+
+		return $object;
 	}
 
 	/**

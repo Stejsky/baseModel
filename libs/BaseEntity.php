@@ -11,12 +11,4 @@ use Nette\Object;
 
 class BaseEntity extends Object {
 
-	/**
-	 * @var int
-	 * @map login_user_id
-	 */
-	public $id;
-
-	public $name;
-
 } 
