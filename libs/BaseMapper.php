@@ -14,6 +14,7 @@ use Nette\Reflection\AnnotationsParser;
 class BaseMapper extends Object {
 
 	private $annotationForEncoding = 'map';
+	private $annotationForIgnore = 'ignore';
 
 	/**
 	 * @param BaseEntity $entity
@@ -23,12 +24,14 @@ class BaseMapper extends Object {
 	{
 		$reflection = new \ReflectionClass($entity);
 		$properties = $reflection->getProperties();
-		$result = [];
+		$result = array();
 		foreach ($properties as $property)
 		{
 			$annotations = AnnotationsParser::getAll($property);
 			if (isset($annotations[$this->annotationForEncoding])) {
 				$key = $annotations[$this->annotationForEncoding][0];
+			} elseif(isset($annotations[$this->annotationForIgnore])) {
+				continue;
 			} else {
 				$key = $property->getName();
 			}
@@ -73,11 +76,29 @@ class BaseMapper extends Object {
 		return $object;
 	}
 
+	public function decodeList($array, $objectName)
+	{
+		$result = array();
+		foreach ($array as $singleArray)
+		{
+			$result[] = $this->decode($singleArray, new $objectName);
+		}
+		return $result;
+	}
+
 	/**
 	 * @param string $annotationForEncoding
 	 */
 	public function setAnnotationForEncoding($annotationForEncoding)
 	{
 		$this->annotationForEncoding = $annotationForEncoding;
+	}
+
+	/**
+	 * @param string $annotationForIgnore
+	 */
+	public function setAnnotationForIgnore($annotationForIgnore)
+	{
+		$this->annotationForIgnore = $annotationForIgnore;
 	}
 } 
