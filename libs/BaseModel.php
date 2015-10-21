@@ -40,7 +40,7 @@ abstract class BaseModel extends Object {
 		return $this->decode($this->getTable()->get($id));
 	}
 
-	private function decode($rows)
+	protected function decode($rows)
 	{
 		return $this->baseMapper->decode($rows, $this->entity);
 	}
