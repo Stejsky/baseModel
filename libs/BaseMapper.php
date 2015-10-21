@@ -47,7 +47,7 @@ class BaseMapper extends Object {
 	 * @param $object - new instance of entity, that should be filled
 	 * @return $object
 	 */
-	public function decode($array, $object)
+	private function decodeSingle($array, $object)
 	{
 		$reflection = new \ReflectionClass($object);
 		$properties = $reflection->getProperties();
@@ -76,12 +76,12 @@ class BaseMapper extends Object {
 		return $object;
 	}
 
-	public function decodeList($array, $objectName)
+	public function decode($array, $object)
 	{
 		$result = array();
 		foreach ($array as $singleArray)
 		{
-			$result[] = $this->decode($singleArray, new $objectName);
+			$result[] = $this->decodeSingle($singleArray, clone $object);
 		}
 		return $result;
 	}

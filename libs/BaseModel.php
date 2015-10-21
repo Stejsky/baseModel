@@ -12,17 +12,24 @@ use Nette\Object;
 
 abstract class BaseModel extends Object {
 
+	/** @var  Context */
 	protected $database;
 
+	/** @var  BaseMapper */
 	protected $baseMapper;
+
+	protected $entity;
+
+	protected $entityName;
 
 	public function __construct(Context $database, BaseMapper $baseMapper)
 	{
 		$this->baseMapper  = $baseMapper;
 		$this->database = $database;
+		$this->entity = new $this->entityName;
 	}
 
-	public function getTable()
+	protected function getTable()
 	{
 		$tableName = $this->getTableName();
 		return $this->database->table($tableName);
@@ -30,12 +37,17 @@ abstract class BaseModel extends Object {
 
 	public function getItem($id)
 	{
-		return $this->getTable()->get($id);
+		return $this->decode($this->getTable()->get($id));
+	}
+
+	private function decode($rows)
+	{
+		return $this->baseMapper->decode($rows, $this->entity);
 	}
 
 	public function getAllItems()
 	{
-		return $this->getTable()->fetchAll();
+		return $this->decode($this->getTable()->fetchAll());
 	}
 
 	public function addItem(BaseEntity $entity)
