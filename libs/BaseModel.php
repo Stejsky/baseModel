@@ -52,7 +52,7 @@ abstract class BaseModel extends Object {
 
 	public function addItem(BaseEntity $entity)
 	{
-		$array = $this->baseMapper->encode($entity);
+		$array = $this->encode($entity);
 		$this->getTable()->insert($array);
 	}
 
@@ -78,5 +78,30 @@ abstract class BaseModel extends Object {
 		$this->getTable()->delete();
 	}
 
+	public function deleteItem($id)
+	{
+		$this->getTable()->where('id', $id)->delete();
+	}
+
+	public function getItemInArray($id)
+	{
+		return $this->getTable()->get($id);
+	}
+
+	public function updateItem(BaseEntity $entity)
+	{
+		$array = $this->encode($entity);
+		$this->getTable()->where('id', $entity->id)->update($array);
+	}
+
+	protected function encode($entity)
+	{
+		return $this->baseMapper->encode($entity);
+	}
+
+	public function getPairs($value = null, $value1 = null)
+	{
+		return $this->getTable()->fetchPairs($value, $value1);
+	}
 
 } 

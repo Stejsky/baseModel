@@ -78,12 +78,17 @@ class BaseMapper extends Object {
 
 	public function decode($array, $object)
 	{
-		$result = array();
-		foreach ($array as $singleArray)
-		{
-			$result[] = $this->decodeSingle($singleArray, clone $object);
+		if (is_array($array)) {
+			$result = array();
+			foreach ($array as $singleArray)
+			{
+				$result[] = $this->decodeSingle($singleArray, clone $object);
+			}
+
+			return $result;
+		} else {
+			return $this->decodeSingle($array, clone $object);
 		}
-		return $result;
 	}
 
 	/**
