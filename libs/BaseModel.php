@@ -29,7 +29,7 @@ abstract class BaseModel extends Object {
 		$this->entity = new $this->entityName;
 	}
 
-	protected function getTable()
+	public function getTable()
 	{
 		$tableName = $this->getTableName();
 		return $this->database->table($tableName);
