@@ -10,7 +10,7 @@ namespace Stejsky\BaseModel;
 use Nette\Database\Context;
 use Nette\Object;
 
-abstract class BaseModel extends Object {
+class BaseModel extends Object {
 
 	/** @var  Context */
 	protected $database;
