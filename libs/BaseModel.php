@@ -53,7 +53,7 @@ class BaseModel extends Object {
 	public function addItem(BaseEntity $entity)
 	{
 		$array = $this->encode($entity);
-		$this->getTable()->insert($array);
+		return $this->decode($this->getTable()->insert($array));
 	}
 
 	private static function getTableName()
@@ -102,6 +102,16 @@ class BaseModel extends Object {
 	public function getPairs($value = null, $value1 = null)
 	{
 		return $this->getTable()->fetchPairs($value, $value1);
+	}
+
+	public function getWhere($array)
+	{
+		return $this->decode($this->getTable()->where($array)->fetchAll());
+	}
+
+	public function getSingleWhere($array)
+	{
+		return $this->decode($this->getTable()->where($array)->fetch());
 	}
 
 } 
